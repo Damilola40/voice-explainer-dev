@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
 from elevenlabs.play import play
 from openai import audio, chat
+import time
 
 load_dotenv()
 
@@ -15,7 +16,7 @@ elevenlabs = ElevenLabs(
 
 client = genai.Client()
 
-def explain(user_input: str):
+def explain(user_input: str, max_retries=3):
 
     system_prompt = """You are a patient coding mentor explaining code and errors out loud, as if speaking directly to a student sitting next to you. 
     Your explanation will be converted to speech, so:
@@ -34,9 +35,20 @@ def explain(user_input: str):
         )
     )
 
-    try:
-        response = chat.send_message(user_input)
+    response = None
+    for attempt in range(max_retries):
+        try:
+            response = chat.send_message(user_input)
+            break
+        except Exception as e:
+            print(f"Gemini attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(2)  # wait 2 seconds before trying again
+            else:
+                return "Sorry, I couldn't generate an explanation right now.", None
 
+            
+    try:
         audio = elevenlabs.text_to_speech.convert(
             text=response.text,
             voice_id="JBFqnCBsd6RMkjVDRZzb",
@@ -44,10 +56,11 @@ def explain(user_input: str):
             output_format="mp3_44100_128",
         )
         return response.text, audio
-    
+
     except Exception as e:
-            print(f"Error generating explanation: {e}")
-            return "Sorry, I couldn't generate an explanation.", None
+        print(f"Error generating audio: {e}")
+        return response.text, None
+    
 
 def save_audio(audio_generator, filename="output.mp3"):
     try:
