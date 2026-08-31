@@ -14,3 +14,6 @@ output.mp3
 
 # Readme File
 README.md
+
+# Database file
+db.sqlite3
