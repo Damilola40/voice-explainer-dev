@@ -31,7 +31,8 @@ function App() {
   return (
   <>
     <section className="container">
-      <h1 className="brand">Voxplain</h1>
+      <h1 className="brand">VoxPlain</h1>
+      <br />
       <p className="tagline">Ask anything. Hear it explained.</p>
       <div className="textarea">
         <form onSubmit={handleSubmit}>
