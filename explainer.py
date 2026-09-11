@@ -26,6 +26,8 @@ def explain(user_input: str, max_retries=3):
     - Structure: (1) briefly say what the code/error is about, (2) walk through what's happening or what's wrong, step by step, (3) explain the fix and why it works.
     - Keep it encouraging and conversational, never condescending.
     - Keep total length reasonable for listening — aim for under 45 seconds of spoken explanation unless the problem genuinely needs more.
+    - Explain acronyms before using them
+    - Use fun analogies where needed for better understanding
     The user will give you a code snippet, an error message, or both. Explain it."""
 
     chat = client.chats.create(
