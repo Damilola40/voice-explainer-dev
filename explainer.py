@@ -31,7 +31,7 @@ def explain(user_input: str, max_retries=3):
     The user will give you a code snippet, an error message, or both. Explain it."""
 
     chat = client.chats.create(
-        model="gemini-3.5-flash",
+        model="gemini-3.8-flash",
         config=types.GenerateContentConfig(
             system_instruction=system_prompt
         )
